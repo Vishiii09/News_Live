@@ -14,16 +14,16 @@ public class NewsDao {
 
     public boolean add(News news, String[] catids) {
         boolean status = false;
-        ConnectionPool cp = ConnectionPool.getInstance();
-        cp.initialize();
-        Connection con = cp.getConnection();
+        ConnectionPool cp = ConnectionPool.getInstance(); //connection created
+        cp.initialize(); //initialize
+        Connection con = cp.getConnection(); //got connection 
 
         if (con != null) {
             try {
                 con.setAutoCommit(false);
 
                 String sql = "Insert into news(title, description, image, reporter_id, status,status_text) values(?,?,?,?,?,?)";
-                PreparedStatement smt = con.prepareStatement(sql);
+                PreparedStatement smt = con.prepareStatement(sql); //interface 
                 smt.setString(1, news.getTitle());
                 smt.setString(2, news.getDescription());
                 smt.setString(3, news.getImage());
@@ -31,7 +31,7 @@ public class NewsDao {
                 smt.setString(5, news.getStatus());
                 smt.setString(6, news.getStatus_text());
 
-                smt.executeUpdate();
+                smt.executeUpdate(); //query executed
 
                 sql = "select id from news order by id desc limit 1";
                 smt = con.prepareStatement(sql);
@@ -128,14 +128,14 @@ public class NewsDao {
         return news;
     }
 
-    public ArrayList<News> getAllNews() {
+    public ArrayList<News> getAllNews(String status) {
         ArrayList<News> newsList = new ArrayList();
         try {
             ConnectionPool cp = ConnectionPool.getInstance();
             cp.initialize();
             Connection con = cp.getConnection();
             if (con != null) {
-                String sql = "select * from news";
+                String sql = "select * from news where status=?";
                 PreparedStatement smt = con.prepareStatement(sql);
 
                 ResultSet rs = smt.executeQuery();

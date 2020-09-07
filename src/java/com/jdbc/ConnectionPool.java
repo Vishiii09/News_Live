@@ -11,11 +11,11 @@ import java.util.*;
  *
  * @author HP
  */
-public class ConnectionPool {
+public class ConnectionPool { //class
     static final int MAX_CONNECTIONS = 20;
-    static Vector connections = null;
-    static ConnectionPool instance = null;
-    public synchronized void removeAllConnections(){
+    static Vector connections = null; //collection
+    static ConnectionPool instance = null; //instance is object of coneection pool
+    public synchronized void removeAllConnections(){ 
         try{
             if(connections == null){
                 return;
@@ -46,9 +46,10 @@ public class ConnectionPool {
                 String userName = "root";
                 String Password = "";
                 
-                String url = "jdbc:mysql://localhost:3306/training2";
+                String url = "jdbc:mysql://localhost:3306/training2"; 
+//API-jdbc name of db-mysql localhost is server code no of db-3306 our db-training2
                 
-                Class.forName("com.mysql.jdbc.Driver");
+                Class.forName("com.mysql.jdbc.Driver"); 
                 
                 connections = new Vector();
                 int count = 0;
@@ -74,7 +75,7 @@ public class ConnectionPool {
         }
         return c;
     }
-    
+    //this function used for release connection and add that connection in connection pool
     public synchronized void putConnection(Connection c){
         connections.addElement(c);
         notifyAll();

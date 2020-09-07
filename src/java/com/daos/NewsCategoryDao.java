@@ -38,6 +38,35 @@ public class NewsCategoryDao {
         }
         return status;
     }
+public ArrayList<NewsCategory> getNewsCategoryById(int id) {
+        ArrayList<NewsCategory> AllNewsCategory = new ArrayList();
+      System.out.println("id:"+id);
+        try {
+            ConnectionPool cp = ConnectionPool.getInstance();
+            cp.initialize();
+            Connection con = cp.getConnection();
+            if (con != null) {
+                String sql = "select * from newscategory where id in(select cat_id from ncr where news_id=?)";
+                PreparedStatement ps = con.prepareStatement(sql);
+                ps.setInt(1,id);
+                ResultSet rs = ps.executeQuery();
+                System.out.println("=============");
+                while (rs.next()) {
+                    NewsCategory news_cat = new NewsCategory();
+                    news_cat.setId(rs.getInt("id"));
+                    news_cat.setName(rs.getString("name"));
+
+                    AllNewsCategory.add(news_cat);
+                }
+                cp.putConnection(con);
+                ps.close();
+            }
+        } catch (Exception e) {
+            System.out.println("Error:" + e.getMessage());
+        }
+
+        return AllNewsCategory;
+    }
 
     public boolean removeById(int id) {
         boolean status = false;
